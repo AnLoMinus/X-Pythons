@@ -2,24 +2,67 @@
 
 X-Pythons is a comprehensive Python development environment that provides a wide range of tools and features for efficient Python programming and project management.
 
-## Current Version: 0.8.6 🏷️
+## Current Version: 0.9.0 🏷️
 
 ### Key Features ✨
 
-- Library Management 📚
-- File Explorer with Script Execution 🗂️
-- Enhanced Package Installer with Categorized Libraries 📥
-- Code Editor with Multi-Language Support 📝
-- Project Management 🏗️
-- Git Integration 🔀
-- Debugger 🐞
-- Unit Testing Framework 🧪
-- Advanced Virtual Environment Management 🐍
-- Integrated Terminal 💻
-- Collaboration Tools 👥
-- AI-powered Code Suggestions and Refactoring 🤖
-- IDE Integration (VS Code, PyCharm) 🔗
-- Customizable UI Themes 🎨
+- **Advanced Library Management 📚**
+
+  - View system-wide and virtual environment-specific libraries
+  - Easy switching between library views
+  - Update and remove libraries with ease
+
+- **File Explorer with Script Execution 🗂️**
+
+  - Browse files and execute Python scripts directly
+
+- **Enhanced Package Installer with Categorized Libraries 📥**
+
+  - Search and install packages from PyPI
+  - Categorized library tabs for easy navigation
+  - New categories: Networking, Database, Testing, Security, System, Audio, and more
+
+- **Code Editor with Multi-Language Support 📝**
+
+  - Syntax highlighting for multiple programming languages
+  - Auto-completion and code refactoring tools
+
+- **Project Management 🏗️**
+
+  - Create and manage projects with ease
+  - Integration with popular IDEs like VS Code and PyCharm
+
+- **Git Integration 🔀**
+
+  - Initialize, commit, and push changes to Git repositories
+
+- **Debugger 🐞**
+
+  - Step through code and inspect variables
+
+- **Unit Testing Framework 🧪**
+
+  - Run and manage unit tests for your projects
+
+- **Advanced Virtual Environment Management 🐍**
+
+  - Create, activate, and manage virtual environments
+  - Install packages to the active virtual environment
+
+- **Integrated Terminal 💻**
+
+  - Execute shell commands within the application
+
+- **Collaboration Tools 👥**
+
+  - Real-time code sharing and collaboration features
+
+- **AI-powered Code Suggestions and Refactoring 🤖**
+
+  - Get AI-driven suggestions for code improvements
+
+- **Customizable UI Themes 🎨**
+  - Choose from multiple themes to suit your preference
 
 ### Technologies 🛠️
 
@@ -47,17 +90,28 @@ X-Pythons is a comprehensive Python development environment that provides a wide
 
 ### How to Use 🚀
 
-1. Clone the repository
-2. Install requirements: `pip install -r requirements.txt`
-3. Run the `main.py` file
+1. **Clone the repository**: `bash
+git clone https://github.com/AnLoMinus/X-Pythons
+cd X-Pythons   `
+
+2. **Install requirements**: `bash
+pip install -r requirements.txt   `
+
+3. **Run the application**: `bash
+python main.py   `
 
 ### Recent Updates 🆕
 
-- Enhanced Virtual Environment Management:
-  - Create new virtual environments
-  - List existing virtual environments
-  - Activate a selected virtual environment
-  - Install packages to the active virtual environment
+- Added new categories to the package installer: System and Audio
+- Expanded package options in new and existing categories
+- Expanded package categories in the installer with up to 24 packages each
+- Enhanced Library Manager to show installed libraries for the active virtual environment
+- Added functionality to switch between system-wide and virtual environment library views
+- Improved integration between Virtual Environment Manager and Library Manager
+- Create new virtual environments
+- List existing virtual environments
+- Activate a selected virtual environment
+- Install packages to the active virtual environment
 - Improved terminal integration for package installation feedback
 - Added multi-select options for library installation
 - Implemented tabbed interface for different library categories
