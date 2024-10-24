@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Pythons - Comprehensive Python Development Environment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --feature-bg: #ffffff;
+            --feature-shadow: rgba(0, 0, 0, 0.1);
+            --header-bg: #34495e;
+            --footer-bg: #34495e;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--secondary-color);
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background-color: var(--feature-bg);
+            padding: 20px;
+            box-shadow: 2px 0 5px var(--feature-shadow);
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+            position: sticky;
+            top: 80px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            background-color: var(--feature-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px var(--feature-shadow);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--primary-color);
+            cursor: pointer;
+        }
+
+        .feature:nth-child(3n+1) {
+            border-top-color: var(--accent-color);
+        }
+
+        .feature:nth-child(3n+2) {
+            border-top-color: var(--success-color);
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-details {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .changelog {
+            background-color: var(--feature-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px var(--feature-shadow);
+            max-height: 400px;
+            overflow-y: auto;
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .changelog h3 {
+            color: var(--primary-color);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .changelog h3::before {
+            content: '▶ ';
+            font-size: 0.8em;
+        }
+
+        .changelog h3.active::before {
+            content: '▼ ';
+        }
+
+        .changelog ul {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .changelog h3.active+ul {
+            display: block;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--accent-color);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            text-decoration: none;
+            display: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: none;
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1a1a;
+                --text-color: #f4f4f4;
+                --feature-bg: #2c2c2c;
+                --feature-shadow: rgba(0, 0, 0, 0.2);
+                --header-bg: #2c3e50;
+                --footer-bg: #2c3e50;
+            }
+
+            .feature {
+                border: 1px solid #444;
+            }
+
+            .changelog {
+                border-left-color: #f39c12;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <header>
+        <h1>X-Pythons 🐍</h1>
+        <p>A comprehensive Python development environment for efficient programming and project management.</p>
+    </header>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <h2>Navigation</h2>
+            <ul>
+                <li><a href="#features">Key Features</a></li>
+                <li><a href="#get-started">Get Started</a></li>
+                <li><a href="#changelog">Changelog</a></li>
+            </ul>
+            <h2>Current Version: 0.9.0 🏷️</h2>
+            <a href="https://github.com/AnLoMinus/X-Pythons" class="cta-button">View on GitHub</a>
+        </aside>
+
+        <main class="main-content">
+            <section id="features">
+                <h2>Key Features ✨</h2>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <h3>📚 Advanced Library Management</h3>
+                        <p>View and manage libraries for both system-wide and virtual environments.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Easy installation and removal of packages</li>
+                                <li>Version management for each library</li>
+                                <li>Dependency tracking and conflict resolution</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🗂️ File Explorer with Script Execution</h3>
+                        <p>Browse files and execute Python scripts directly.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Search and navigate through the file system</li>
+                                <li>Execute Python scripts with a single click</li>
+                                <li>View script execution results in real-time</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>📥 Enhanced Package Installer</h3>
+                        <p>Search and install packages from PyPI with categorized library tabs.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Search packages by name, category, or keyword</li>
+                                <li>Install packages with a single click</li>
+                                <li>Manage package dependencies</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>📝 Code Editor with Multi-Language Support</h3>
+                        <p>Enjoy syntax highlighting and auto-completion for multiple languages.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Syntax highlighting for Python, JavaScript, Java, C++, Ruby, Go, Rust</li>
+                                <li>Auto-completion for multiple languages</li>
+                                <li>Code refactoring and suggestions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🔀 Git Integration</h3>
+                        <p>Initialize, commit, and push changes to Git repositories.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Initialize a new repository</li>
+                                <li>Commit changes with a single click</li>
+                                <li>Push changes to a remote repository</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🐞 Debugger</h3>
+                        <p>Step through code and inspect variables with ease.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Step through code execution</li>
+                                <li>Inspect variables in real-time</li>
+                                <li>Set breakpoints and watch variable values</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🧪 Unit Testing Framework</h3>
+                        <p>Run and manage unit tests for your projects.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Run unit tests with a single click</li>
+                                <li>View test results in real-time</li>
+                                <li>Manage test suites and test cases</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🐍 Advanced Virtual Environment Management</h3>
+                        <p>Create, activate, and manage virtual environments.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Create a new virtual environment</li>
+                                <li>Activate an existing virtual environment</li>
+                                <li>Manage virtual environment packages</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <h3>🤖 AI-powered Code Suggestions</h3>
+                        <p>Get AI-driven suggestions for code improvements.</p>
+                        <div class="feature-details">
+                            <ul>
+                                <li>Get AI-driven code suggestions</li>
+                                <li>Refactor code with a single click</li>
+                                <li>Improve code readability and performance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="get-started">
+                <h2>Get Started 🚀</h2>
+                <ol>
+                    <li>Clone the repository: <code>git clone https://github.com/AnLoMinus/X-Pythons</code></li>
+                    <li>Install requirements: <code>pip install -r requirements.txt</code></li>
+                    <li>Run the application: <code>python main.py</code></li>
+                </ol>
+                <a href="https://github.com/AnLoMinus/X-Pythons" class="cta-button">Download Now</a>
+            </section>
+
+            <section id="changelog">
+                <h2>Changelog 🆕</h2>
+                <div class="changelog">
+                    <h3>Version 0.9.0</h3>
+                    <ul>
+                        <li>Added new categories to the package installer: System and Audio</li>
+                        <li>Expanded package options in new and existing categories</li>
+                    </ul>
+                    <h3>Version 0.8.9</h3>
+                    <ul>
+                        <li>Expanded package categories in the installer with up to 24 packages each</li>
+                        <li>Added new categories: Networking, Database, Testing, Security, and more</li>
+                    </ul>
+                    <h3>Version 0.8.8</h3>
+                    <ul>
+                        <li>Added new categories to the package installer: Networking, Database, Testing, Security</li>
+                    </ul>
+                    <h3>Version 0.8.7</h3>
+                    <ul>
+                        <li>Enhanced Library Manager to show installed libraries for the active virtual environment</li>
+                        <li>Added functionality to switch between system-wide and virtual environment library views</li>
+                        <li>Improved integration between Virtual Environment Manager and Library Manager</li>
+                    </ul>
+                    <h3>Version 0.8.6</h3>
+                    <ul>
+                        <li>Enhanced Virtual Environment Manager with new features (create, list, activate, install
+                            packages)</li>
+                        <li>Improved terminal integration for real-time feedback during package installation</li>
+                        <li>Updated UI to reflect new virtual environment management features</li>
+                    </ul>
+                    <h3>Version 0.8.5</h3>
+                    <ul>
+                        <li>Enhanced Installer with categorized top libraries for easy selection and installation</li>
+                        <li>Implemented multi-select options for library installation</li>
+                        <li>Added tabbed interface for different library categories</li>
+                        <li>Improved terminal integration for package installation feedback</li>
+                        <li>Updated UI layout for better user experience</li>
+                    </ul>
+                    <h3>Version 0.8.4</h3>
+                    <ul>
+                        <li>Fixed Unit Tester module to properly handle unittest.mock</li>
+                        <li>Added functionality to open files in Code Editor from File Explorer</li>
+                        <li>Implemented tabbed interface for Code Editor to handle multiple files</li>
+                        <li>Enhanced file saving and loading capabilities in Code Editor</li>
+                    </ul>
+                    <h3>Version 0.8.3</h3>
+                    <ul>
+                        <li>Enhanced Installer with a list of all available packages from PyPI</li>
+                        <li>Added search functionality for available packages in the Installer</li>
+                        <li>Implemented real-time filtering of available packages</li>
+                        <li>Added automatic refresh of available packages list after installation</li>
+                    </ul>
+                    <h3>Version 0.8</h3>
+                    <ul>
+                        <li>Added support for multiple programming languages (Python, JavaScript, Java, C++, Ruby, Go,
+                            Rust)</li>
+                        <li>Integrated with popular IDEs (VS Code, PyCharm)</li>
+                        <li>Implemented AI-powered code suggestions and refactoring (placeholder functionality)</li>
+                        <li>Enhanced Code Editor with multi-language syntax highlighting</li>
+                        <li>Improved project management with IDE integration</li>
+                    </ul>
+                    <h3>Version 0.7.1</h3>
+                    <ul>
+                        <li>Added search functionality to Library Manager</li>
+                        <li>Added emojis to tab bars and dock widget titles for improved visual cues</li>
+                    </ul>
+                    <h3>Version 0.7</h3>
+                    <ul>
+                        <li>Added customizable UI themes (Light, Dark, Blue, Green)</li>
+                        <li>Implemented performance optimizations with lazy loading of modules</li>
+                        <li>Added support for multiple programming languages in the Code Editor</li>
+                        <li>Introduced a Collaboration Manager for real-time code sharing</li>
+                        <li>Improved overall user interface with dock widgets</li>
+                        <li>Enhanced theme customization options</li>
+                    </ul>
+                    <h3>Version 0.6</h3>
+                    <ul>
+                        <li>Integrated version control system (Git)</li>
+                        <li>Added debugging tools</li>
+                        <li>Implemented unit testing framework</li>
+                        <li>Added code auto-completion in the Code Editor</li>
+                        <li>Implemented virtual environment management</li>
+                        <li>Added integrated terminal</li>
+                        <li>Improved overall performance and user interface</li>
+                    </ul>
+                    <h3>Version 0.5</h3>
+                    <ul>
+                        <li>Added Code Editor with syntax highlighting for Python</li>
+                        <li>Implemented Project Manager for creating and managing projects</li>
+                        <li>Added language selection feature</li>
+                        <li>Improved user interface and increased window size</li>
+                        <li>Enhanced documentation system</li>
+                    </ul>
+                    <h3>Version 0.4</h3>
+                    <ul>
+                        <li>Implemented actual library detection and listing in Library Manager</li>
+                        <li>Added functionality to update and remove libraries</li>
+                        <li>Implemented basic text editor for Python scripts in File Explorer</li>
+                        <li>Integrated with PyPI to search and download packages</li>
+                        <li>Implemented download progress tracking</li>
+                        <li>Added actual package installation using pip</li>
+                        <li>Added version selection for package installation</li>
+                        <li>Implemented settings/configuration management with dark mode</li>
+                        <li>Added basic user activity logging</li>
+                        <li>Created a help documentation system</li>
+                        <li>Added about dialog</li>
+                    </ul>
+                    <h3>Version 0.3</h3>
+                    <ul>
+                        <li>Added basic functionality to Library Manager</li>
+                        <li>Implemented File Explorer with script running capability</li>
+                        <li>Added Downloader interface for package downloading</li>
+                        <li>Added Installer interface for package installation</li>
+                        <li>Introduced menu bar with File and Help menus</li>
+                        <li>Improved overall layout and user interface</li>
+                    </ul>
+                    <h3>Version 0.2</h3>
+                    <ul>
+                        <li>Introduced tab-based interface</li>
+                        <li>Added placeholder modules for Library Manager, File Explorer, Downloader, and Installer</li>
+                        <li>Implemented status bar for user feedback</li>
+                    </ul>
+                    <h3>Version 0.1</h3>
+                    <ul>
+                        <li>Initial project setup</li>
+                        <li>Basic PyQt5 window implementation</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>Developed by AnLoMinus. For support or inquiries, please contact: <a
+                href="mailto:areweleon@gmail.com">areweleon@gmail.com</a></p>
+        <p>&copy; 2024 X-Pythons. All rights reserved.</p>
+    </footer>
+
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+
+    <script>
+        // Changelog toggle
+        document.querySelectorAll('.changelog h3').forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+            });
+        });
+
+        // Feature details toggle
+        document.querySelectorAll('.feature').forEach(feature => {
+            feature.addEventListener('click', () => {
+                const details = feature.querySelector('.feature-details');
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+
+</html>
